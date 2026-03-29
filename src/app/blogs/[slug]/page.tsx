@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Clock3, Eye } from "lucide-react"
 import { AppShell } from "@/components/app-shell"
 import { AuthorChip } from "@/components/author-chip"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { PostCard } from "@/components/post-card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -107,12 +108,11 @@ export default async function BlogDetailPage({
 
         <section className="grid gap-8 lg:grid-cols-[1fr_18rem]">
           <Card className="border-border/60 bg-background/90">
-            <CardContent className="space-y-6 px-8 py-8 sm:px-10 sm:py-10">
-              {post.content.split("\n\n").map((paragraph) => (
-                <p key={paragraph} className="text-base leading-8 text-foreground/90">
-                  {paragraph}
-                </p>
-              ))}
+            <CardContent className="px-8 py-8 sm:px-10 sm:py-10">
+              <MarkdownRenderer
+                content={post.content}
+                className="prose prose-zinc max-w-none dark:prose-invert"
+              />
             </CardContent>
           </Card>
 
