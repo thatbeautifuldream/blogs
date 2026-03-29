@@ -49,6 +49,10 @@
 }
 
 :root {
+  --font-sans: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia,
+    "Times New Roman", serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+    monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -123,6 +127,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top left, rgb(242 230 219 / 0.75), transparent 28%),
+      radial-gradient(circle at top right, rgb(225 234 242 / 0.7), transparent 34%);
+    background-attachment: fixed;
   }
   html {
     @apply font-sans;
