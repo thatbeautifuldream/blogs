@@ -21,24 +21,24 @@ export default async function Home() {
 
   return (
     <AppShell tone="warm">
-      <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+      <section>
         <Card className="overflow-hidden border-border/60 bg-background/90">
-          <CardContent className="grid gap-8 p-8 lg:grid-cols-[1fr_18rem] lg:p-10">
-            <div className="space-y-6">
+          <CardContent className="grid gap-8 p-6 sm:p-8 lg:gap-10 xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,22rem)] xl:p-10">
+            <div className="order-2 space-y-6 xl:order-1">
               <Badge variant="secondary" className="w-fit">
                 Explore today
               </Badge>
               <div className="space-y-4">
-                <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+                <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl xl:text-[4.25rem] xl:leading-[0.95]">
                   A type-safe publishing product with enough surface area to feel
                   real already.
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+                <p className="max-w-xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
                   Browse strong seeded writing, jump into real route flows, and
                   inspect a no-auth editor that keeps the future DB path clean.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 pt-1">
                 <Button asChild size="lg">
                   <Link href={`/blogs/${explore.heroPost.slug}`}>
                     Read the lead story
@@ -56,17 +56,24 @@ export default async function Home() {
             </div>
 
             <div
-              className="min-h-80 rounded-[2rem] border border-border/60 bg-cover bg-center shadow-sm"
+              className="order-1 min-h-[18rem] rounded-[2rem] border border-border/60 bg-cover bg-center shadow-sm sm:min-h-[24rem] xl:order-2 xl:min-h-full"
               style={{ backgroundImage: `url(${explore.heroPost.coverImageUrl})` }}
             />
           </CardContent>
         </Card>
+      </section>
 
+      <section>
         <Card className="border-border/60 bg-background/90">
-          <CardHeader>
-            <CardTitle className="text-lg">Trending topics</CardTitle>
+          <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <CardTitle className="text-lg">Trending topics</CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Topics with active seeded coverage right now.
+            </p>
           </CardHeader>
-          <CardContent className="space-y-4 pb-6">
+          <CardContent className="grid gap-3 pb-6 md:grid-cols-2 xl:grid-cols-3">
             {explore.topics.map((topic) => (
               <div
                 key={topic.label}
@@ -92,14 +99,14 @@ export default async function Home() {
             <Link href="/blogs">See all</Link>
           </Button>
         </div>
-        <div className="grid gap-6 xl:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {explore.featuredPosts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="grid gap-6 xl:grid-cols-[minmax(18rem,0.9fr)_minmax(0,1.1fr)]">
         <Card className="border-border/60 bg-background/90">
           <CardHeader>
             <CardTitle className="text-lg">Active authors</CardTitle>
@@ -111,7 +118,7 @@ export default async function Home() {
                 href={`/u/${author.username}`}
                 className="flex items-center justify-between gap-4 rounded-2xl bg-muted/35 px-4 py-4 transition-colors hover:bg-muted/55"
               >
-                <AuthorChip author={author} subtitle={author.headline} />
+                <AuthorChip author={author} subtitle={author.headline} linked={false} />
                 <div className="text-right text-sm text-muted-foreground">
                   <div>{author.totalPosts} posts</div>
                   <div>{formatCompactNumber(author.totalViews)} reads</div>

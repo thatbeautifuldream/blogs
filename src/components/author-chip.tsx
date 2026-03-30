@@ -10,14 +10,16 @@ type AuthorChipProps = {
     headline?: string
   }
   subtitle?: string
+  linked?: boolean
 }
 
-export function AuthorChip({ author, subtitle }: AuthorChipProps) {
-  return (
-    <Link
-      href={`/u/${author.username}`}
-      className="inline-flex items-center gap-3 rounded-2xl transition-colors hover:bg-muted/50"
-    >
+export function AuthorChip({
+  author,
+  subtitle,
+  linked = true,
+}: AuthorChipProps) {
+  const content = (
+    <>
       <Avatar className="size-11">
         <AvatarImage src={author.avatarUrl} alt={author.name} />
         <AvatarFallback>{initials(author.name)}</AvatarFallback>
@@ -28,6 +30,19 @@ export function AuthorChip({ author, subtitle }: AuthorChipProps) {
           {subtitle ?? author.headline ?? `@${author.username}`}
         </div>
       </div>
+    </>
+  )
+
+  if (!linked) {
+    return <div className="inline-flex items-center gap-3">{content}</div>
+  }
+
+  return (
+    <Link
+      href={`/u/${author.username}`}
+      className="inline-flex items-center gap-3 rounded-2xl transition-colors hover:bg-muted/50"
+    >
+      {content}
     </Link>
   )
 }
