@@ -4,8 +4,8 @@ import { EditorWorkspace } from "@/components/editor-workspace";
 import { getCaller } from "@/trpc/server";
 
 export const metadata: Metadata = {
-  title: "Editor | Blogs",
-  description: "Local-first draft composition for the no-auth phase.",
+  title: "Editor | Blog",
+  description: "Write and preview your content.",
 };
 
 export default async function EditorPage() {
@@ -13,7 +13,7 @@ export default async function EditorPage() {
   const editor = await caller.content.editorBootstrap();
 
   return (
-    <AppShell tone="warm">
+    <AppShell>
       <EditorWorkspace editor={editor} />
     </AppShell>
   );

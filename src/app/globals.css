@@ -1,3 +1,4 @@
+@import url("https://rsms.me/inter/inter.css");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -8,7 +9,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: "InterVariable", sans-serif;
+  --font-sans--font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -50,7 +52,6 @@
 }
 
 :root {
-  --font-sans: Arial, Helvetica, sans-serif;
   --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0.14 0 0);
@@ -131,24 +132,9 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: Arial, Helvetica, sans-serif;
   }
 
   a {
     @apply transition-colors;
-  }
-}
-
-@layer components {
-  .hn-frame {
-    @apply border border-border bg-background;
-  }
-
-  .hn-section-title {
-    @apply text-sm font-bold uppercase tracking-[0.16em] text-muted-foreground;
-  }
-
-  .hn-link {
-    @apply text-foreground underline-offset-2 hover:underline;
   }
 }

@@ -3,8 +3,8 @@ import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Blogs",
-  description: "A no-auth blog platform with typed routes, seeded editorial content, and a pragmatic demo-data layer.",
+  title: "Blog",
+  description: "A minimal blog platform for writing that matters.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full bg-background text-foreground">
+      <body className="isolate min-h-full bg-background text-foreground">
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>

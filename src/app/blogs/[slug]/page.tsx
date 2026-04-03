@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock3, Eye } from "lucide-react";
-import { AppShell } from "@/components/app-shell";
 import { AuthorChip } from "@/components/author-chip";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { PostCard } from "@/components/post-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { formatCompactNumber, formatLongDate } from "@/lib/content-format";
 import { getCaller } from "@/trpc/server";
 
@@ -24,12 +22,12 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post not found | Blogs",
+      title: "Post not found | Blog",
     };
   }
 
   return {
-    title: `${post.title} | Blogs`,
+    title: `${post.title} | Blog`,
     description: post.excerpt,
   };
 }
@@ -58,109 +56,81 @@ export default async function BlogDetailPage({
   }
 
   return (
-    <AppShell>
-      <div className="space-y-6">
-        <Button variant="ghost" size="sm" asChild className="w-fit">
+    <>
+      <article className="space-y-10">
+        <Button variant="ghost" size="sm" asChild className="w-fit -ml-3">
           <Link href="/blogs">
             <ArrowLeft className="size-4" />
-            Back to all blogs
+            Back
           </Link>
         </Button>
 
-        <section className="grid gap-px border border-border bg-border lg:grid-cols-[minmax(0,1.2fr)_18rem]">
-          <div className="space-y-5 bg-background p-5 md:p-6">
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-
-            <div className="max-w-4xl space-y-4">
-              <h1 className="text-4xl font-bold tracking-tight md:text-5xl">{post.title}</h1>
-              <p className="text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
-                {post.excerpt}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-              <span>{formatLongDate(post.publishedAt)}</span>
-              <span className="inline-flex items-center gap-1">
-                <Clock3 className="size-3.5" />
-                {post.readingTimeMinutes} min read
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Eye className="size-3.5" />
-                {formatCompactNumber(post.views)} views
-              </span>
-            </div>
-
-            <AuthorChip author={post.author} subtitle={post.author.headline} />
+        <header className="space-y-8">
+          <div className="flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <Badge key={tag} variant="outline">
+                {tag}
+              </Badge>
+            ))}
           </div>
 
-          <div className="bg-background p-4 md:p-5">
-            <div
-              className="h-full min-h-64 border border-border bg-cover bg-center"
-              style={{ backgroundImage: `url(${post.coverImageUrl})` }}
-            />
-          </div>
-        </section>
-
-        <Separator />
-
-        <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-          <Card>
-            <CardContent className="py-5">
-              <MarkdownRenderer content={post.content} className="prose prose-neutral max-w-none dark:prose-invert" />
-            </CardContent>
-          </Card>
-
-          <aside className="space-y-4">
-            <Card>
-              <CardContent className="space-y-4 py-5">
-                <div className="text-sm font-bold uppercase tracking-[0.14em] text-muted-foreground">
-                  Reading notes
-                </div>
-                <div className="text-sm leading-6 text-muted-foreground">
-                  This detail page is DB-ready but will fall back to local demo
-                  content if Postgres is not available.
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="space-y-3 py-5 text-sm text-muted-foreground">
-                <div className="font-bold uppercase tracking-[0.14em] text-foreground">
-                  Next routes
-                </div>
-                <Link href={`/u/${post.author.username}`} className="block hover:text-foreground">
-                  View author profile
-                </Link>
-                <Link href="/editor" className="block hover:text-foreground">
-                  Open editor demo
-                </Link>
-                <Link href="/blogs" className="block hover:text-foreground">
-                  Browse more posts
-                </Link>
-              </CardContent>
-            </Card>
-          </aside>
-        </section>
-
-        <section className="space-y-4">
-          <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight">Related reading</h2>
-            <p className="text-sm text-muted-foreground">
-              Nearby posts pulled from the same typed content layer.
+          <div className="space-y-6">
+            <h1 className="text-5xl font-semibold tracking-tight leading-tight md:text-6xl lg:text-7xl">
+              {post.title}
+            </h1>
+            <p className="text-xl leading-8 text-muted-foreground md:text-2xl">
+              {post.excerpt}
             </p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+
+          <div className="flex flex-wrap items-center gap-6 gap-y-3 text-sm text-muted-foreground">
+            <AuthorChip author={post.author} subtitle={post.author.headline} />
+            <span>{formatLongDate(post.publishedAt)}</span>
+            <span className="inline-flex items-center gap-1">
+              <Clock3 className="size-4" />
+              {post.readingTimeMinutes} min
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Eye className="size-4" />
+              <span className="tabular-nums">{formatCompactNumber(post.views)}</span>
+            </span>
+          </div>
+        </header>
+
+        <Card>
+          <CardContent className="p-8 md:p-10">
+            <MarkdownRenderer
+              content={post.content}
+              className="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-7 prose-p:text-muted-foreground"
+            />
+          </CardContent>
+        </Card>
+
+        <div className="flex flex-wrap gap-3 pt-4">
+          <Button asChild variant="outline">
+            <Link href="/editor">Write a response</Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link href="/blogs">Browse more</Link>
+          </Button>
+        </div>
+      </article>
+
+      {relatedPosts.length > 0 && (
+        <section className="space-y-8">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-semibold tracking-tight">Related posts</h2>
+            <p className="text-base text-muted-foreground">
+              Continue reading.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
             {relatedPosts.map((relatedPost) => (
               <PostCard key={relatedPost.slug} post={relatedPost} />
             ))}
           </div>
         </section>
-      </div>
-    </AppShell>
+      )}
+    </>
   );
 }

@@ -7,15 +7,8 @@ import { AuthorChip } from "@/components/author-chip";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 
 type EditorWorkspaceProps = {
@@ -57,7 +50,6 @@ type EditorWorkspaceProps = {
 export function EditorWorkspace({ editor }: EditorWorkspaceProps) {
   const [title, setTitle] = useState(editor.draft.title);
   const [slug, setSlug] = useState(editor.draft.slug);
-  const [coverImageUrl, setCoverImageUrl] = useState(editor.draft.coverImageUrl);
   const [excerpt, setExcerpt] = useState(editor.draft.excerpt);
   const [content, setContent] = useState(editor.draft.content);
 
@@ -67,147 +59,122 @@ export function EditorWorkspace({ editor }: EditorWorkspaceProps) {
   }, [content]);
 
   return (
-    <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
-      <div className="space-y-5">
-        <Card>
-          <CardHeader className="border-b border-border">
-            <div className="space-y-2">
-              <Badge variant="outline" className="w-fit">
-                Editor
-              </Badge>
-              <CardTitle className="text-2xl md:text-3xl">Compose a new story</CardTitle>
-              <CardDescription className="max-w-2xl">
-                Dense, practical writing surface with Monaco on the left and a
-                Streamdown preview on the right.
-              </CardDescription>
-            </div>
-            <AuthorChip author={editor.author} subtitle={editor.author.headline} />
-          </CardHeader>
+    <>
+      <section className="space-y-6">
+        <Badge variant="outline">Editor</Badge>
+        <div className="space-y-4">
+          <h1 className="text-5xl font-semibold tracking-tight leading-tight md:text-6xl lg:text-7xl">
+            Write a new story
+          </h1>
+          <p className="max-w-2xl text-lg leading-7 text-muted-foreground md:text-xl">
+            Create and preview your content with live markdown rendering.
+          </p>
+        </div>
+        <AuthorChip author={editor.author} subtitle={editor.author.headline} />
+      </section>
 
-          <CardContent className="space-y-5 py-5">
-            <div className="grid gap-4 md:grid-cols-2">
+      <section className="space-y-8">
+        <Card>
+          <CardContent className="space-y-6 p-8">
+            <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <label htmlFor="title" className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                <label htmlFor="title" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Title
                 </label>
                 <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
               </div>
               <div className="space-y-2">
-                <label htmlFor="slug" className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                <label htmlFor="slug" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   Slug
                 </label>
                 <Input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
               </div>
             </div>
-
             <div className="space-y-2">
-              <label htmlFor="cover" className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                Cover image URL
-              </label>
-              <Input id="cover" value={coverImageUrl} onChange={(e) => setCoverImageUrl(e.target.value)} />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="excerpt" className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
+              <label htmlFor="excerpt" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Excerpt
               </label>
-              <Textarea id="excerpt" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={4} />
+              <Textarea id="excerpt" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={3} />
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="space-y-8">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              <label htmlFor="content">Content</label>
+              <span className="tabular-nums">{inferredReadingTime} min read</span>
+            </div>
+            <div className="overflow-hidden rounded-lg border border-border">
+              <Editor
+                height="480px"
+                defaultLanguage="markdown"
+                language="markdown"
+                value={content}
+                onChange={(value) => setContent(value ?? "")}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  lineHeight: 24,
+                  wordWrap: "on",
+                  scrollBeyondLastLine: false,
+                  padding: { top: 16, bottom: 16 },
+                  roundedSelection: false,
+                  overviewRulerBorder: false,
+                  automaticLayout: true,
+                }}
+                theme="vs-dark"
+              />
             </div>
 
-            <div className="grid gap-4 xl:grid-cols-2">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                  <label htmlFor="content">Markdown body</label>
-                  <span>{inferredReadingTime} min read</span>
-                </div>
-                <div className="overflow-hidden border border-border bg-background">
-                  <Editor
-                    height="640px"
-                    defaultLanguage="markdown"
-                    language="markdown"
-                    value={content}
-                    onChange={(value) => setContent(value ?? "")}
-                    options={{
-                      minimap: { enabled: false },
-                      fontSize: 13,
-                      lineHeight: 22,
-                      wordWrap: "on",
-                      scrollBeyondLastLine: false,
-                      padding: { top: 16, bottom: 16 },
-                      roundedSelection: false,
-                      overviewRulerBorder: false,
-                      automaticLayout: true,
-                    }}
-                    theme="vs-dark"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                  <span>Live preview</span>
-                  <Badge variant="outline">Streamdown</Badge>
-                </div>
-                <div className="min-h-[640px] border border-border bg-background px-5 py-5">
-                  <div className="space-y-3 border-b border-border pb-4">
-                    <div className="text-2xl font-bold tracking-tight">{title}</div>
-                    <div className="text-sm leading-6 text-muted-foreground">{excerpt}</div>
-                    <div className="flex flex-wrap gap-2">
-                      {editor.draft.tags.map((tag) => (
-                        <Badge key={tag} variant="outline">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <MarkdownRenderer content={content} className="prose prose-neutral mt-5 max-w-none dark:prose-invert" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               <Button>
                 <Sparkles className="size-4" />
                 Save draft
               </Button>
-              <Button variant="outline">Preview post</Button>
-              <Button variant="secondary">Publish later</Button>
+              <Button variant="outline">Preview</Button>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
 
-      <div className="space-y-5">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Publishing checklist</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pb-5 text-sm text-muted-foreground">
-            {editor.checklist.map((item) => (
-              <div key={item} className="border border-border px-3 py-3">
-                {item}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Suggested nearby reads</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 pb-5">
-            {editor.suggestions.map((suggestion, index) => (
-              <div key={suggestion.slug} className="space-y-3">
-                {index > 0 ? <Separator /> : null}
-                <div className="space-y-1">
-                  <Badge variant="outline">{suggestion.tag}</Badge>
-                  <div className="text-sm font-semibold leading-6">{suggestion.title}</div>
+          <div className="space-y-6">
+            <Card>
+              <CardContent className="space-y-4 p-6">
+                <h3 className="text-lg font-semibold">Preview</h3>
+                <div className="space-y-3">
+                  <h4 className="text-xl font-semibold tracking-tight">{title}</h4>
+                  <p className="text-sm leading-6 text-muted-foreground">{excerpt}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {editor.draft.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-    </section>
+                <div className="border-t border-border pt-4">
+                  <MarkdownRenderer content={content} className="prose prose-neutral prose-sm max-w-none dark:prose-invert" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="space-y-3 p-6">
+                <h3 className="text-lg font-semibold">Checklist</h3>
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  {editor.checklist.map((item) => (
+                    <div key={item} className="flex items-start gap-2">
+                      <span className="text-primary shrink-0">✓</span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
